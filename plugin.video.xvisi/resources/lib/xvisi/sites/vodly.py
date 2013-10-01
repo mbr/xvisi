@@ -1,3 +1,4 @@
+import re
 from urlparse import urljoin, urlparse
 
 from lxml.html import fromstring
@@ -17,6 +18,12 @@ def _get_link_type(link):
         raise ValueError('Cannot get link type of %r' % link)
 
 
+def remove_whitespace(s):
+    NO_WHITESPACE_PLEASE = re.compile('\s+')
+
+    return NO_WHITESPACE_PLEASE.sub(' ', s).strip()
+
+
 class Vodly(VideoSite):
     name = 'Vodly.to'
     short_name = 'vodly'
@@ -33,11 +40,32 @@ class Vodly(VideoSite):
         for item in self._parse_overview(resp.text):
             yield _get_link_type(item['link']), item['link'], item['title']
 
-    def get_front(self):
-        resp = web.get(self._BASEURL)
+    def get_episodes(self, key):
+        resp = web.get(key)
 
-        for item in self._parse_overview(resp.text):
-            yield _get_link_type(item['link']), item['link'], item['title']
+        root = fromstring(resp.text)
+
+        for h2_season in root.cssselect('.tv_container h2'):
+            episodes = []
+
+            for elem in h2_season.itersiblings():
+                if elem.tag == 'h2':
+                    break
+
+                link = elem.cssselect('a')[0]
+                episodes.append((
+                    link.attrib['href'],
+                    remove_whitespace(link.text)
+                ))
+
+            yield remove_whitespace(h2_season.text_content()), episodes
+
+    def get_front(self):
+        for url in (self._BASEURL, self._BASEURL + '?tv'):
+            resp = web.get(url)
+
+            for item in self._parse_overview(resp.text):
+                yield _get_link_type(item['link']), item['link'], item['title']
 
     def get_sources(self, key):
         resp = web.get(key)

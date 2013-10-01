@@ -10,6 +10,12 @@ class VideoSite(object):
         Each result is a 3-tuple of (item_type, key, title)."""
         raise NotImplementedError()
 
+    def get_episodes(self):
+        """Return a list groups of episodes. Each episode is a tuple of
+        (title, episode_list), while episode_lists consist of (key, title)
+        tuples."""
+        pass
+
     def get_front(self):
         """Like search(), but returns a random iterator of content, typically
         recently added items."""

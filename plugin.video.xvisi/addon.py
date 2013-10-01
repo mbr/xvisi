@@ -61,16 +61,26 @@ def play_source(url):
     source = get_sources_for(url)[0]
     video_url = source.get_video_url(url)
 
+    # FIXME: maybe its possible to do this a little smarter and play directly?
     return [{
-        'label': 'Play',
+        'label': 'Play video',
         'path': video_url,
         'is_playable': True,
     }]
 
 
 @plugin.route('/sites/tvshow/<site_id>/<key>/')
-def show_tvshow(site_id, url):
-    return []
+def show_tvshow(site_id, key):
+    site = all_sites[site_id]
+
+    for season, episodes in site.get_episodes(key):
+        for key, title in episodes:
+            yield {
+                'label': '%s/%s' % (season, title),
+                'path': plugin.url_for('show_sources',
+                                       site_id=site.id,
+                                       key=key)
+            }
 
 
 if __name__ == '__main__':
