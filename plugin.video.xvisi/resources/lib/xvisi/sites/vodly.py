@@ -58,7 +58,7 @@ class Vodly(VideoSite):
                     remove_whitespace(link.text)
                 ))
 
-            yield remove_whitespace(h2_season.text_content()), episodes
+            yield remove_whitespace(h2_season.cssselect('a')[0].text), episodes
 
     def get_front(self):
         for url in (self._BASEURL, self._BASEURL + '?tv'):
