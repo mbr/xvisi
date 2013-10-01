@@ -13,3 +13,12 @@ all_sources = [
 all_sites = {
     site.id: site for site in _all_sites
 }
+
+
+def get_sources_for(url):
+    sources = []
+    for source in all_sources:
+        if source.can_play(url):
+            sources.append(source)
+
+    return sources
