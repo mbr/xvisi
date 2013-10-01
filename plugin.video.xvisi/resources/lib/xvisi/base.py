@@ -13,4 +13,17 @@ class VideoSite(object):
     def get_front(self):
         """Like search(), but returns a random iterator of content, typically
         recently added items."""
-        pass
+        raise NotImplementedError()
+
+    def get_sources(self, key):
+        """Called with either a movie key or an episode key, returns
+        a list of (url, title) links."""
+        raise NotImplementedError()
+
+
+class VideoSource(object):
+    def can_play(self, url):
+        raise NotImplementedError()
+
+    def get_video_url(self, url):
+        raise NotImplementedError()

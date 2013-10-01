@@ -1,5 +1,5 @@
 from xbmcswift2 import Plugin
-from resources.lib.xvisi import all_sites
+from resources.lib.xvisi import all_sites, all_sources
 
 plugin = Plugin()
 
@@ -12,7 +12,6 @@ def index():
         yield {
             'label': site.name,
             'path': plugin.url_for('show_site', site_id=site.id),
-            'is_playable': False,
         }
 
 
@@ -31,14 +30,26 @@ def show_site(site_id):
         elif type == 'MOVIE':
             yield {
                 'label': '(Movie) %s' % title,
-                'path': plugin.url_for('show_movie',
+                'path': plugin.url_for('show_sources',
                                        site_id=site.id,
                                        key=key)
             }
 
 
-@plugin.route('/sites/movie/<site_id>/<key>/')
-def show_movie(site_id, url):
+@plugin.route('/sites/sources/<site_id>/<key>/')
+def show_sources(site_id, key):
+    site = all_sites[site_id]
+    for url, title in site.get_sources(key):
+        for source in all_sources:
+            if source.can_play(url):
+                yield {
+                    'label': title,
+                    'path': plugin.url_for('play_source', url=key)
+                }
+
+
+@plugin.route('/play/<url>/')
+def play_source(url):
     return []
 
 

@@ -1,7 +1,13 @@
-from .vodly import Vodly
+from .sites import vodly
+from .sources import putlocker
 
 _all_sites = [
-    Vodly(),
+    vodly.Vodly(),
+]
+
+all_sources = [
+    putlocker.PutlockerComSource(),
+    putlocker.PutlockerWsSource(),
 ]
 
 all_sites = {
