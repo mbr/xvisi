@@ -1,5 +1,9 @@
 from .vodly import Vodly
 
-all_sites = [
+_all_sites = [
     Vodly(),
 ]
+
+all_sites = {
+    site.id: site for site in _all_sites
+}

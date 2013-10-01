@@ -6,7 +6,22 @@ from .base import VideoSite
 from .web import web
 
 
+def _get_link_type(link):
+    u = urlparse(link)
+
+    if u.path.startswith('/watch'):
+        return 'MOVIE'
+    elif u.path.startswith('/tv'):
+        return 'TVSHOW'
+    else:
+        raise ValueError('Cannot get link type of %r' % link)
+
+
 class Vodly(VideoSite):
+    name = 'Vodly.to'
+    short_name = 'vodly'
+    id = 'vodly'
+
     _BASEURL = 'http://vodly.to/'
 
     def search(self, term):
@@ -16,13 +31,13 @@ class Vodly(VideoSite):
         })
 
         for item in self._parse_overview(resp.text):
-            yield item, item['title']
+            yield _get_link_type(item['link']), item['link'], item['title']
 
     def get_front(self):
         resp = web.get(self._BASEURL)
 
         for item in self._parse_overview(resp.text):
-            yield item, item['title']
+            yield _get_link_type(item['link']), item['link'], item['title']
 
     def _parse_overview(self, page):
         root = fromstring(page)
@@ -34,13 +49,5 @@ class Vodly(VideoSite):
 
             if d['title'].startswith('Watch '):
                 d['title'] = d['title'][6:]
-
-            u = urlparse(d['link'])
-            if u.path.startswith('/watch'):
-                d['vtype'] = 'MOVIE'
-            elif u.path.startswith('/tv'):
-                d['vtype'] = 'TVSHOW'
-            else:
-                raise ValueError('Could not identify link: %s' % link)
 
             yield d
