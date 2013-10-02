@@ -1,8 +1,9 @@
-from .sites import vodly
+from .sites import vodly, primewire
 from .sources import putlocker
 
 _all_sites = [
     vodly.Vodly(),
+    primewire.PrimeWire(),
 ]
 
 all_sources = [
