@@ -33,7 +33,7 @@ def index():
 
 @plugin.route('/search/')
 def show_search_form():
-    keyboard = xbmc.Keyboard('mytext')
+    keyboard = xbmc.Keyboard('')
     keyboard.doModal()
     if (keyboard.isConfirmed()):
         return plugin.redirect(plugin.url_for(
