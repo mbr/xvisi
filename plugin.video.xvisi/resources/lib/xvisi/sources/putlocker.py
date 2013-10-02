@@ -1,5 +1,5 @@
 import re
-from urlparse import urlparse, urljoin
+from urlparse import urljoin
 
 from lxml.html import fromstring
 
@@ -8,10 +8,7 @@ from ..web import web
 
 
 class PutlockerWsSource(VideoSource):
-    def can_play(self, url):
-        u = urlparse(url)
-
-        return 'putlocker.ws' in u.netloc
+    _NETLOC = 'putlocker.ws'
 
     def get_video_url(self, url):
         resp = web.post(url, data={'freeuser': 'yes'})
@@ -19,10 +16,7 @@ class PutlockerWsSource(VideoSource):
 
 
 class PutlockerComSource(VideoSource):
-    def can_play(self, url):
-        u = urlparse(url)
-
-        return 'putlocker.com' in u.netloc
+    _NETLOC = 'putlocker.com'
 
     def get_video_url(self, url):
         resp = web.post(url, data={'freeuser': 'yes'})

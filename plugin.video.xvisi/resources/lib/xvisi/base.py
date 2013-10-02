@@ -1,3 +1,6 @@
+from urlparse import urlparse
+
+
 class VideoSite(object):
     name = 'Unnamed Site'  # long name to display
     id = 'und'             # internal id to be used
@@ -29,7 +32,11 @@ class VideoSite(object):
 
 class VideoSource(object):
     def can_play(self, url):
-        raise NotImplementedError()
+        if not hasattr(self, '_NETLOC'):
+            raise NotImplementedError()
+
+        u = urlparse(url)
+        return self._NETLOC in u.netloc
 
     def get_video_url(self, url):
         raise NotImplementedError()
