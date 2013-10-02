@@ -42,3 +42,11 @@ class PrimeWire(Vodly):
 
             href = frames[-1].attrib['src']
             yield href, urlparse(href).netloc
+
+    def get_front(self):
+        for url, type in [(self._BASEURL, 'MOVIE'),
+                          (self._BASEURL + '?tv', 'TVSHOW')]:
+            resp = web.get(url)
+
+            for item in self._parse_overview(resp.text):
+                yield type, item['link'], item['title']
