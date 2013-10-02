@@ -1,7 +1,12 @@
 from xbmcswift2 import Plugin
+from xbmcswift2 import xbmc, xbmcgui
 from resources.lib.xvisi import all_sites, get_sources_for
 
 plugin = Plugin()
+
+_history = plugin.get_storage('search_history')
+if not 'entries' in _history:
+    _history['entries'] = []
 
 
 @plugin.route('/')
@@ -13,6 +18,70 @@ def index():
             'label': site.name,
             'path': plugin.url_for('show_site', site_id=site.id),
         }
+
+        for entry in _history['entries']:
+            yield {
+                'label': 'Search "%s"' % entry,
+                'path': plugin.url_for('search', terms=entry)
+            }
+
+        yield {
+            'label': 'Search all sites...',
+            'path': plugin.url_for('show_search_form')
+        }
+
+
+@plugin.route('/search/')
+def show_search_form():
+    keyboard = xbmc.Keyboard('mytext')
+    keyboard.doModal()
+    if (keyboard.isConfirmed()):
+        return plugin.redirect(plugin.url_for(
+            'search', terms=keyboard.getText()
+        ))
+    return plugin.redirect(plugin.url_for('index'))
+
+
+@plugin.route('/search/<terms>/')
+def search(terms):
+    if not all_sites:
+        return []
+
+    _history['entries'].insert(0, terms)
+    _history['entries'] = _history['entries'][:10]
+
+    progress = xbmcgui.DialogProgress()
+    progress.create('Searching...', terms)
+
+    results = []
+    total = len(all_sites)
+    for i, site in enumerate(all_sites.values()):
+        for type, key, title in site.search(terms):
+            if type == 'TVSHOW':
+                results.append({
+                    'label': '[%s] (TV) %s' % (site.short_name, title),
+                    'path': plugin.url_for('show_tvshow',
+                                           site_id=site.id,
+                                           key=key)
+                })
+            elif type == 'MOVIE':
+                results.append({
+                    'label': '[%s] (Movie) %s' % (site.short_name, title),
+                    'path': plugin.url_for('show_sources',
+                                           site_id=site.id,
+                                           key=key)
+                })
+
+        progress.update(int(100.0 * (i+1) / total),
+                        'Results so far: %d' % len(results),
+                        '',
+                        'Done searching %s' % site.name)
+        if progress.iscanceled():
+            break
+
+    progress.close()
+
+    return results
 
 
 @plugin.route('/sites/<site_id>/')
