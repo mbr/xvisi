@@ -11,6 +11,8 @@
     <platform>all</platform>
     <language></language>
     <summary lang="en">Watch videos from various video sites.</summary>
-    <description lang="en">Watch streaming video from sites like[CR][CR]* vodly.to</description>
+    <description lang="en">Watch streaming video from sites like[CR][CR]
+      * vodly.to[CR]
+      * primewire.ag</description>
   </extension>
 </addon>
