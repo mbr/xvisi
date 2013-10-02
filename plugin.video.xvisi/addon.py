@@ -1,5 +1,17 @@
 from xbmcswift2 import Plugin
 from xbmcswift2 import xbmc, xbmcgui
+
+try:
+    import lxml
+    lxml
+except ImportError:
+    dialog = xbmcgui.Dialog()
+    dialog.ok('Sorry!', "Sorry, but you don't have lxml available and we",
+                        "can't install it for you. Contact your xbmc-supplier",
+                        "for a fix - or sneakily do it yourself!")
+    import sys
+    sys.exit(0)
+
 from resources.lib.xvisi import all_sites, get_sources_for
 
 plugin = Plugin()
