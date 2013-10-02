@@ -31,16 +31,16 @@ def index():
             'path': plugin.url_for('show_site', site_id=site.id),
         }
 
-        for entry in _history['entries']:
-            yield {
-                'label': 'Search "%s"' % entry,
-                'path': plugin.url_for('search', terms=entry)
-            }
-
+    for entry in _history['entries']:
         yield {
-            'label': 'Search all sites...',
-            'path': plugin.url_for('show_search_form')
+            'label': 'Search "%s"' % entry,
+            'path': plugin.url_for('search', terms=entry)
         }
+
+    yield {
+        'label': 'Search all sites...',
+        'path': plugin.url_for('show_search_form')
+    }
 
 
 @plugin.route('/search/')
