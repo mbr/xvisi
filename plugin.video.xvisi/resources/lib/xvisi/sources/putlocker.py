@@ -18,6 +18,10 @@ class PutlockerWsSource(VideoSource):
 class PutlockerComSource(VideoSource):
     _NETLOC = 'putlocker.com'
 
+    def can_play(self, url):
+        return super(PutlockerComSource, self).can_play(url) and \
+            not url.endswith('?404')
+
     def get_video_url(self, url):
         resp = web.post(url, data={'freeuser': 'yes'})
 
