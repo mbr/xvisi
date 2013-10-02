@@ -90,7 +90,7 @@ class Vodly(VideoSite):
         root = fromstring(page)
         for link in root.cssselect('.index_item > a'):
             d = {
-                'link': link.attrib['href'],
+                'link': urljoin(self._BASEURL, link.attrib['href']),
                 'title': link.attrib['title'],
             }
 
