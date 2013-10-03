@@ -12,6 +12,34 @@ class PrimeWire(Vodly):
     short_name = 'primewire'
     id = 'primewire'
 
+    def search(self, term):
+        #import pdb
+        #pdb.set_trace()
+        # get a key first
+        resp = web.get(self._BASEURL)
+        root = fromstring(resp.text)
+        key = root.cssselect('input[name="key"]')[0].attrib['value']
+
+        # search movies
+        resp = web.get(urljoin(self._BASEURL, 'index.php'), params={
+            'search_section': 1,
+            'search_keywords': term,
+            'key': key,
+        })
+
+        for item in self._parse_overview(resp.text):
+            yield 'MOVIE', item['link'], item['title']
+
+        # search tvshows
+        resp = web.get(urljoin(self._BASEURL, 'index.php'), params={
+            'search_section': 2,
+            'search_keywords': term,
+            'key': key,
+        })
+
+        for item in self._parse_overview(resp.text):
+            yield 'TVSHOW', item['link'], item['title']
+
     def get_sources(self, key):
         resp = web.get(key)
 
