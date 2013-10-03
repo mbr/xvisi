@@ -59,6 +59,9 @@ def search(terms):
     if not all_sites:
         return []
 
+    if terms in _history['entries']:
+        _history['entries'].remove(terms)
+
     _history['entries'].insert(0, terms)
     _history['entries'] = _history['entries'][:10]
 
