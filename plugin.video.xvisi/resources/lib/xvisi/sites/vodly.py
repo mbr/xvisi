@@ -52,6 +52,10 @@ class Vodly(VideoSite):
                 if elem.tag == 'h2':
                     break
 
+                if 'transp2' in elem.attrib['class']:
+                    # unavailable episode
+                    continue
+
                 link = elem.cssselect('a')[0]
                 episodes.append((
                     link.attrib['href'],
