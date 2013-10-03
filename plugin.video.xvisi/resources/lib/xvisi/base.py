@@ -13,10 +13,13 @@ class VideoSite(object):
         Each result is a 3-tuple of (item_type, key, title)."""
         raise NotImplementedError()
 
+    def get_seasons(self):
+        """Return a list of tv show seasons. Each item is a tuple of
+        (key, title), where key is usable with get_episodes()."""
+
     def get_episodes(self):
-        """Return a list groups of episodes. Each episode is a tuple of
-        (title, episode_list), while episode_lists consist of (key, title)
-        tuples."""
+        """Return a list of episodes for a season. Each item is a tuple of
+        (key, title), suitable for get_sources()."""
         pass
 
     def get_front(self):

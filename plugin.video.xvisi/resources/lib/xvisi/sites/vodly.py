@@ -40,7 +40,8 @@ class Vodly(VideoSite):
         for item in self._parse_overview(resp.text):
             yield _get_link_type(item['link']), item['link'], item['title']
 
-    def get_episodes(self, key):
+    def _load_tvshow_page(self, key):
+        # FIXME: this should use clever caching
         resp = web.get(key)
 
         root = fromstring(resp.text)
@@ -63,6 +64,16 @@ class Vodly(VideoSite):
                 ))
 
             yield remove_whitespace(h2_season.cssselect('a')[0].text), episodes
+
+    def get_seasons(self, key):
+        return [('%s#%s' % (key, season), season)
+                for season, _ in self._load_tvshow_page(key)]
+
+    def get_episodes(self, key):
+        show_key, selected_season = key.split('#')
+        for season, episodes in self._load_tvshow_page(show_key):
+            if selected_season == season:
+                return episodes
 
     def get_front(self):
         for url in (self._BASEURL, self._BASEURL + '?tv'):

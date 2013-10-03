@@ -153,18 +153,30 @@ def play_source(url):
     }]
 
 
-@plugin.route('/sites/tvshow/<site_id>/<key>/')
+@plugin.route('/sites/tvshow/<site_id>/seasons/<key>/')
 def show_tvshow(site_id, key):
     site = all_sites[site_id]
 
-    for season, episodes in site.get_episodes(key):
-        for key, title in episodes:
-            yield {
-                'label': '%s/%s' % (season, title),
-                'path': plugin.url_for('show_sources',
-                                       site_id=site.id,
-                                       key=key)
-            }
+    for key, title in site.get_seasons(key):
+        yield {
+            'label': title,
+            'path': plugin.url_for('show_episodes',
+                                   site_id=site.id,
+                                   key=key)
+        }
+
+
+@plugin.route('/sites/tvshow/<site_id>/episodes/<key>/')
+def show_episodes(site_id, key):
+    site = all_sites[site_id]
+
+    for key, title in site.get_episodes(key):
+        yield {
+            'label': title,
+            'path': plugin.url_for('show_sources',
+                                   site_id=site.id,
+                                   key=key)
+        }
 
 
 if __name__ == '__main__':
