@@ -9,7 +9,8 @@ _all_sites = [
 all_sources = [
     putlocker.PutlockerComSource(),
     putlocker.PutlockerWsSource(),
-    filenuke.FileNukeSource(),
+    # currently broken
+    #filenuke.FileNukeSource(),
 ]
 
 all_sites = {
