@@ -8,7 +8,7 @@ class FileNukeSource(VideoSource):
     _NETLOC = 'filenuke.'
 
     def get_video_url(self, url):
-        fnid = url[url.rfind('/'):]
+        fnid = url[url.rfind('/')+1:]
 
         resp = web.post(url, data={
             'op': 'download1',
@@ -16,7 +16,8 @@ class FileNukeSource(VideoSource):
             'id': fnid,
             'fname': 'dl',
             'referer': '',
-            'method_free': 'Play Now',
+            'method_free': 'Free',
+            'fname': 'meh',
         })
 
         return re.search(r"'file', '(.*)'", resp.text).group(1)
