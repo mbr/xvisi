@@ -121,7 +121,9 @@ def show_site(site_id):
 
 
 @plugin.route('/sites/sources/<site_id>/<key>/')
-@plugin.cached()
+# do not use caching - often times, the plugin is updated to show
+# newly added sources, causing the cache to display stale results
+#@plugin.cached()
 def show_sources(site_id, key):
     site = all_sites[site_id]
 
