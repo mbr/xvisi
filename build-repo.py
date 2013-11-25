@@ -1,12 +1,15 @@
 #!env python
 
 from cStringIO import StringIO
+from dulwich.repo import Repo
 import hashlib
 import os
+import subprocess
 from zipfile import ZipFile, ZIP_DEFLATED
 
 from lxml import etree
 from tempdir import TempDir
+from unleash.git import export_to_dir
 
 
 def collect_addons(addons_root):
@@ -41,16 +44,14 @@ REPO = 'repository.xvisi'
 
 
 if __name__ == '__main__':
-    root_dir = os.path.abspath(os.path.dirname(__name__))
-
     # create temporary directory
-    with TempDir() as _build_dir:
-        # different tempdir versions =(
-        if hasattr(_build_dir, 'name'):
-            build_dir = _build_dir.name
-        else:
-            build_dir = _build_dir
+    with TempDir() as build_dir, TempDir() as root_dir:
+        print 'checking out clean master...'
+        repo = Repo(os.path.abspath(os.path.dirname(__name__)))
+        master_commit_id = repo.refs['refs/heads/master']
+        export_to_dir(repo, master_commit_id, root_dir)
 
+        print 'creating addon repository...'
         # first, create repo zip file
         repo_zipfn = os.path.join(build_dir, REPO + '.zip')
         repo_addon_fn = os.path.join(root_dir, REPO, 'addon.xml')
@@ -85,3 +86,9 @@ if __name__ == '__main__':
             os.mkdir(addon_dir)
 
             package_addon(zippath, os.path.join(root_dir, addon.attrib['id']))
+
+        print 'creating new commit'
+        subprocess.check_call(
+            ['gittar', 'file:%s/*' % build_dir, 'file:%s/.*' % build_dir,
+             '-b', 'gh-pages']
+        )
