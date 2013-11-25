@@ -4,9 +4,7 @@ from cStringIO import StringIO
 from dulwich.repo import Repo
 import hashlib
 import os
-import requests
 import subprocess
-from urlparse import urlparse
 from zipfile import ZipFile, ZIP_DEFLATED
 
 from lxml import etree
@@ -45,8 +43,6 @@ def package_addon(zipfn, addon_dir):
 
 
 REPO = 'repository.xvisi'
-DEP_REPO_URL = ('http://mirrors.xbmc.org/addons/eden/'
-                '%(addon)s/%(addon)s-%(version)s.zip')
 
 
 if __name__ == '__main__':
@@ -75,7 +71,6 @@ if __name__ == '__main__':
                 addons_xml.write(infoxml)
                 addons_sig.write(hashlib.md5(infoxml).hexdigest())
 
-        dependencies = set()
         # go over each addon and create zip file
         for addon in addons_node.findall('addon'):
             zipname = '%(id)s.%(version)s.zip' % addon.attrib
@@ -93,33 +88,6 @@ if __name__ == '__main__':
                            os.path.join(build_dir,
                                         addon.attrib['id'] + '.zip'))
 
-            # collect dependencies
-            reqs = addon.find('requires')
-            if reqs is not None:
-                for imp in reqs.findall('import'):
-                    # skip xbmc. deps, those ship already
-                    if imp.attrib['addon'].startswith('xbmc.'):
-                        continue
-
-                    dependencies.add((DEP_REPO_URL % imp.attrib,
-                                      imp.attrib['addon']))
-
-        print 'collecting dependencies...'
-        for url, name in dependencies:
-            print url
-            fn = urlparse(url).path.rsplit('/', 1)[-1]
-            dep_path = os.path.join(build_dir, name)
-
-            if not os.path.exists(dep_path):
-                os.mkdir(dep_path)
-
-            target = os.path.join(dep_path, fn)
-            r = requests.get(url)
-            with open(target, 'w') as t:
-                t.write(r.content)
-
-        import pdb
-        pdb.set_trace()
         print 'creating new commit'
         subprocess.check_call(
             ['gittar', 'file:%s/*' % build_dir, 'file:%s/.*' % build_dir,
