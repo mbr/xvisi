@@ -73,7 +73,7 @@ if __name__ == '__main__':
 
         # go over each addon and create zip file
         for addon in addons_node.findall('addon'):
-            zipname = '%(id)s.%(version)s.zip' % addon.attrib
+            zipname = '%(id)s-%(version)s.zip' % addon.attrib
             addon_dir = os.path.join(build_dir, addon.attrib['id'])
             zippath = os.path.join(addon_dir, zipname)
 
