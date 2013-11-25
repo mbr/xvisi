@@ -1,3 +1,11 @@
+import os
+import sys
+
+# hack around xbmc
+sys.path.append(os.path.join(
+    os.path.abspath(os.path.dirname(__file__)),
+    'global'))
+
 from xbmcswift2 import Plugin
 from xbmcswift2 import xbmc, xbmcgui
 
