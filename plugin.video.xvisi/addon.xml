@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.xvisi" name="xvisi - Video Sites on XBMC" version="0.2.3" provider-name="mbr">
+<addon id="plugin.video.xvisi" name="xvisi - Video Sites on XBMC" version="0.2.4" provider-name="mbr">
   <requires>
   </requires>
   <extension point="xbmc.python.pluginsource" library="addon.py">
