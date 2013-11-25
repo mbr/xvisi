@@ -29,9 +29,11 @@ def package_addon(zipfn, addon_dir):
     print 'packaging from', addon_dir, 'into', zipfn
 
     with ZipFile(zipfn, 'w', ZIP_DEFLATED) as z:
-        print 'walking', addon_dir
         for dirpath, dirs, files in os.walk(addon_dir):
-            relpath = os.path.relpath(dirpath, addon_dir)
+            relpath = os.path.join(
+                os.path.basename(addon_dir),
+                os.path.relpath(dirpath, addon_dir)
+            )
 
             for fn in files:
                 file_path = os.path.join(dirpath, fn)
