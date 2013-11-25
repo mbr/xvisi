@@ -1,8 +1,8 @@
 <addon id="repository.xvisi" name="xvisi repository" version="1.0.1" provider-name="mbr (https://github.com/mbr/xvisi)">
   <extension point="xbmc.addon.repository" name="xvisi XBMC Addons Repository">
     <!-- note: we use https://raw.github.com urls instead of mbr.github.io, because we want https support -->
-    <info compressed="false">https://raw.github.com/mbr/xvisi/gh-pages/addons.xml.md5</info>
-    <checksum>https://raw.github.com/mbr/xvisi/gh-pages/addons.md5</checksum>
+    <info compressed="false">https://raw.github.com/mbr/xvisi/gh-pages/addons.xml</info>
+    <checksum>https://raw.github.com/mbr/xvisi/gh-pages/addons.xml.md5</checksum>
     <datadir zip="true">https://raw.github.com/mbr/xvisi/gh-pages</datadir>
   </extension>
   <extension point="xbmc.addon.metadata">
