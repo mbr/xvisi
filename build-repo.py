@@ -53,14 +53,7 @@ if __name__ == '__main__':
         master_commit_id = repo.refs['refs/heads/master']
         export_to_dir(repo, master_commit_id, root_dir)
 
-        print 'creating addon repository...'
-        # first, create repo zip file
-        repo_zipfn = os.path.join(build_dir, REPO + '.zip')
-        repo_addon_fn = os.path.join(root_dir, REPO, 'addon.xml')
-        with ZipFile(repo_zipfn, 'w', ZIP_DEFLATED) as z:
-            z.write(repo_addon_fn,
-                    arcname=os.path.basename(repo_addon_fn))
-
+        print 'collecting addons'
         # collect addon information
         addons_node = collect_addons(root_dir)
         buf = StringIO()
@@ -88,6 +81,12 @@ if __name__ == '__main__':
             os.mkdir(addon_dir)
 
             package_addon(zippath, os.path.join(root_dir, addon.attrib['id']))
+
+            # if the addon is our repo zip, link inside root
+            if addon.attrib['id'] == REPO:
+                os.symlink(os.path.join(addon.attrib['id'], zipname),
+                           os.path.join(build_dir,
+                                        addon.attrib['id'] + '.zip'))
 
         print 'creating new commit'
         subprocess.check_call(
