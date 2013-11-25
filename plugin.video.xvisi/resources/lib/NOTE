@@ -1,0 +1,1 @@
+xbmcswift2 and requests should not be inside here - but handling custom repositories and XBMC is a real pain - and I'm not in a mood to write a complete package manager.= /
