@@ -14,7 +14,6 @@
 </addon><addon id="plugin.video.xvisi" name="xvisi - Video Sites on XBMC" version="0.2.1" provider-name="mbr">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
-    <import addon="script.module.xbmcswift2" version="2.4.0"/>
   </requires>
   <extension point="xbmc.python.pluginsource" library="addon.py">
     <provides>video</provides>
