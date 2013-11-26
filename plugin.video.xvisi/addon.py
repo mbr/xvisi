@@ -1,5 +1,6 @@
 import os
 import sys
+import time
 
 # hack around xbmc
 sys.path.append(os.path.join(
@@ -8,6 +9,7 @@ sys.path.append(os.path.join(
 
 from xbmcswift2 import Plugin
 from xbmcswift2 import xbmc, xbmcgui
+import requests
 
 try:
     import lxml
@@ -29,6 +31,42 @@ if not 'entries' in _history:
     _history['entries'] = []
 
 
+DOWNLOAD_MOVIE_FN = os.path.join(
+    xbmc.translatePath('special://temp'),
+    'xvisi-video-tmp'
+)
+BUFSIZE = 1024 * 4
+
+
+def format_delta(s):
+    s = int(s)
+
+    def pluralize(n, word):
+        return '%d %s%s' % (
+            n, word, 's' if n != 1 else ''
+        )
+
+    if s < 60:
+        return pluralize(s, 'second')
+
+    minutes = s / 60
+    seconds = s % 60
+
+    # 2-5 minutes return exact time
+    if minutes < 5:
+        return '%s, %s' % (pluralize(minutes, 'minute'),
+                           pluralize(seconds, 'second'))
+
+    if minutes < 60:
+        return pluralize(minutes, 'minute')
+
+    hours = minutes / 60
+    minutes %= 60
+
+    return '%s, %s' % (pluralize(hours, 'hour'),
+                       pluralize(minutes, 'minute'))
+
+
 @plugin.route('/')
 def index():
     for site_id in sorted(all_sites.keys()):
@@ -48,6 +86,12 @@ def index():
     yield {
         'label': 'Search all sites...',
         'path': plugin.url_for('show_search_form')
+    }
+
+    yield {
+        'label': 'Play last download',
+        'path': DOWNLOAD_MOVIE_FN,
+        'is_playable': True,
     }
 
 
@@ -95,7 +139,7 @@ def search(terms):
                                            key=key)
                 })
 
-        progress.update(int(100.0 * (i+1) / total),
+        progress.update(int(100.0 * (i + 1) / total),
                         'Results so far: %d' % len(results),
                         '',
                         'Done searching %s' % site.name)
@@ -159,6 +203,59 @@ def play_source(url):
     return [{
         'label': 'Play video',
         'path': video_url,
+        'is_playable': True,
+    }, {
+        'label': 'Download and play',
+        'path': plugin.url_for('download_and_play', url=video_url),
+    }]
+
+
+@plugin.route('/play-downloaded/')
+def play_downloaded():
+    return [{
+        'label': 'Play downloaded file',
+        'path': DOWNLOAD_MOVIE_FN,
+        'is_playable': True,
+    }]
+
+
+@plugin.route('/buffered_play/<url>/')
+def download_and_play(url):
+    progress = xbmcgui.DialogProgress()
+    progress.create('Starting download...')
+    r = requests.get(url, stream=True)
+
+    downloaded = 0
+    total = r.headers['content-length']\
+        if 'content-length' in r.headers else None
+
+    with open(DOWNLOAD_MOVIE_FN, 'w') as outfile:
+        start_time = time.time()
+        for chunk in r.iter_content(chunk_size=BUFSIZE):
+            outfile.write(chunk)
+            downloaded += len(chunk)
+
+            text = ['Downloaded %.2f M' % (downloaded / 1024.0 / 1024.0)]
+            completion = 0
+
+            if total:
+                elapsed = time.time() - start_time
+                completion = downloaded / float(total)
+
+                if completion > 0:
+                    remaining = elapsed / completion - elapsed
+                    text.append('Time remaining: %s' %
+                                format_delta(remaining))
+
+            progress.update(int(completion) * 100, *text)
+
+            if progress.iscanceled():
+                break
+
+    progress.close()
+    return [{
+        'label': 'Play download',
+        'path': DOWNLOAD_MOVIE_FN,
         'is_playable': True,
     }]
 
