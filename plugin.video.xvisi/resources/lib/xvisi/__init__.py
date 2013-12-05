@@ -1,5 +1,5 @@
 from .sites import vodly, primewire
-from .sources import putlocker, filenuke, promptfile
+from .sources import putlocker, filenuke, promptfile, gorillavid
 
 _all_sites = [
     vodly.Vodly(),
@@ -10,6 +10,7 @@ all_sources = [
     putlocker.PutlockerComSource(),
     putlocker.PutlockerWsSource(),
     promptfile.PromptFileSource(),
+    gorillavid.GorillaVidSource(),
     # currently broken
     #filenuke.FileNukeSource(),
 ]
