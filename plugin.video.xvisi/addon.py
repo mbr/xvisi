@@ -32,7 +32,7 @@ if not 'entries' in _history:
 
 
 DOWNLOAD_MOVIE_FN = os.path.join(
-    xbmc.translatePath('special://temp'),
+    xbmc.translatePath('special://temp/'),
     'xvisi-video-tmp'
 )
 BUFSIZE = 1024 * 4
