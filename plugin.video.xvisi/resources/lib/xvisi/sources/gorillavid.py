@@ -20,4 +20,4 @@ class GorillaVidSource(VideoSource):
         if ('File Not Found') in buf:
             raise VideoSourceRemovedError('The video has been deleted.')
 
-        return str(self._VIDEO_FILE_RE.search(buf).groups(1))
+        return self._VIDEO_FILE_RE.search(buf).groups(1)[0]
