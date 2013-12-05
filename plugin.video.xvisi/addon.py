@@ -23,6 +23,7 @@ except ImportError:
     sys.exit(0)
 
 from resources.lib.xvisi import all_sites, get_sources_for
+from resources.lib.xvisi.base import XVisiExternalError
 
 plugin = Plugin()
 
@@ -196,8 +197,18 @@ def show_sources(site_id, key):
 
 @plugin.route('/play/<url>/')
 def play_source(url):
-    source = get_sources_for(url)[0]
-    video_url = source.get_video_url(url)
+    try:
+        source = get_sources_for(url)[0]
+        video_url = source.get_video_url(url)
+    except XVisiExternalError as e:
+        return [
+            {
+                'label': 'Sorry.',
+            },
+            {
+                'label': str(e),
+            }
+        ]
 
     # FIXME: maybe its possible to do this a little smarter and play directly?
     return [{

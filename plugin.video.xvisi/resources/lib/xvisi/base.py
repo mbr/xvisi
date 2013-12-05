@@ -1,6 +1,18 @@
 from urlparse import urlparse
 
 
+class XVisiExternalError(Exception):
+    pass
+
+
+class VideoSourceError(XVisiExternalError):
+    pass
+
+
+class VideoSourceRemovedError(VideoSourceError):
+    pass
+
+
 class VideoSite(object):
     name = 'Unnamed Site'  # long name to display
     id = 'und'             # internal id to be used
