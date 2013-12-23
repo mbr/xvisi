@@ -59,7 +59,7 @@ class Vodly(VideoSite):
 
                 link = elem.cssselect('a')[0]
                 episodes.append((
-                    link.attrib['href'],
+                    urljoin(self._BASEURL, link.attrib['href']),
                     remove_whitespace(link.text)
                 ))
 
