@@ -3,7 +3,7 @@ import sys
 import time
 
 # hack around xbmc
-sys.path.insert(0, os.path.join(
+sys.path.append(os.path.join(
     os.path.abspath(os.path.dirname(__file__)),
     'global'))
 
