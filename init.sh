@@ -21,7 +21,7 @@ echo "installing xvisi..."
 
 REPO_URL=https://github.com/mbr/xvisi
 REPO_DIR=/opt/local/xvisi
-PLUGIN_NAME=plugins.video.xvisi
+PLUGIN_NAME=plugin.video.xvisi
 ADDONS_DIR=/home/pi/.xbmc/addons
 ADDON_PATH=$ADDONS_DIR/$PLUGIN_NAME
 XBMC_USER=pi
