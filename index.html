@@ -4,6 +4,10 @@ set -e
 
 REMOTE_URL="https://raw.github.com/mbr/xvisi/master/init.sh"
 
-echo "Downloading and running setup script."
+echo "Updating index..."
+sudo apt-get update -y
+echo "Installing ca-certificates..."
+sudo apt-get install -y ca-certificates
+echo "Downloading and running setup script..."
 wget -O- $REMOTE_URL | sudo sh
 echo "All good. ;)"
