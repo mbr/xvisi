@@ -3,8 +3,8 @@
 set -e
 
 REMOTE_URL="https://raw.github.com/mbr/xvisi/master/init.sh"
-TEMPFILE=`mktemp`
-PROGRESS=dialog --progressbox 25 80
+TEMPFILE="`mktemp`""
+PROGRESS="dialog --progressbox 25 80"
 
 echo "Downloading and running setup script."
 wget -O "$TEMPFILE" $REMOTE_URL 2>&1 | $PROGRESS
