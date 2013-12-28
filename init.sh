@@ -17,6 +17,8 @@
 
 set -e
 
+echo "installing xvisi..."
+
 REPO_URL=https://github.com/mbr/xvisi
 REPO_DIR=/opt/local/xvisi
 PLUGIN_NAME=plugins.video.xvisi
