@@ -57,7 +57,11 @@ script
   echo "Started xvisi update on `date`" 1>> \$LOGFILE 2>> \$LOGFILE
   cd $REPO_DIR 2>> \$LOGFILE
   git pull 1>> \$LOGFILE 2>> \$LOGFILE
-  if [ -e ]
+  UPDATE_SCRIPT=$REPO_DIR/on_update
+  if [ -e $UPDATE_SCRIPT ];
+    echo "Running update script..." >> \$LOGFILE
+    $REPO_DIR/on_update.sh 1>> \$LOGFILE 2>> \$LOGFILE
+  fi;
   echo "Finished update on `date`" 1>> \$LOGFILE 2>> \$LOGFILE
 end script
 EOF
