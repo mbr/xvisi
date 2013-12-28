@@ -1,20 +1,5 @@
 #!/bin/sh
 
-# this script is run by the bootstrap.sh found on gh-pages. it runs as root
-# using sudo
-
-# to install on a fresh raspbmc:
-#
-# 1. install and start raspbmc
-# 2. select "Exit" from the shutdown menu
-# 3. when prompted, press ESC for a terminal
-# 4. login as "pw", password "raspberry"
-# 5. type in the following command
-#
-#    wget -O- http://mbr.github.io/xvisi  | sh
-#
-# 6. enjoy
-
 set -e
 
 echo "installing xvisi..."
