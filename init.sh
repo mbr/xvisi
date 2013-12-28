@@ -40,3 +40,23 @@ rm -rf $REPO_DIR $ADDON_PATH
 mkdir -p $REPO_DIR
 git clone $REPO_URL $REPO_DIR
 sudo -u pi -- ln -s $REPO_DIR/$PLUGIN_NAME $ADDON_PATH
+
+cat > /etc/init/update-xvisi.conf << EOF
+description "updates xvisi from github"
+
+start on (started mountall and net-device-up IFACE!=lo and font-loaded and custom-network-done)
+
+console output
+
+task
+
+script
+  set -e
+  LOGFILE=/var/log/xvisi-update.log
+  echo "Checking for xvisi updates..."
+  echo "Started xvisi update on `date`" 1>> $LOGFILE 2>> $LOGFILE
+  cd /opt/local/xvisi 2>> $LOGFILE
+  git pull 1>> $LOGFILE 2>> $LOGFILE
+  echo "Finished update on `date`" 1>> $LOGFILE 2>> $LOGFILE
+end script
+EOF
