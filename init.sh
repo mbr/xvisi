@@ -38,5 +38,5 @@ rm -rf $REPO_DIR $ADDON_PATH
 
 # create new
 mkdir -p $REPO_DIR
-git clone $REPO_URL $REPO_PATH
+git clone $REPO_URL $REPO_DIR
 sudo -u pi -- ln -s $REPO_DIR/$PLUGIN_NAME $ADDON_PATH
