@@ -67,3 +67,6 @@ script
   echo "Finished update on \`date\`" 1>> \$LOGFILE 2>> \$LOGFILE
 end script
 EOF
+
+echo "Installation finished. Rebooting in 10 secs, press C-c to cancel."
+sleep 10 && reboot
