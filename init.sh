@@ -54,9 +54,10 @@ script
   set -e
   LOGFILE=/var/log/xvisi-update.log
   echo "Checking for xvisi updates..."
-  echo "Started xvisi update on `date`" 1>> $LOGFILE 2>> $LOGFILE
-  cd /opt/local/xvisi 2>> $LOGFILE
-  git pull 1>> $LOGFILE 2>> $LOGFILE
-  echo "Finished update on `date`" 1>> $LOGFILE 2>> $LOGFILE
+  echo "Started xvisi update on `date`" 1>> \$LOGFILE 2>> \$LOGFILE
+  cd /opt/local/xvisi 2>> \$LOGFILE
+  git pull 1>> \$LOGFILE 2>> \$LOGFILE
+  if [ -e ]
+  echo "Finished update on `date`" 1>> \$LOGFILE 2>> \$LOGFILE
 end script
 EOF
