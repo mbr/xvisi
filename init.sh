@@ -11,7 +11,7 @@
 # 4. login as "pw", password "raspberry"
 # 5. type in the following command
 #
-#    wget -O- http://mbr.github.io/xvisi/bootstrap.sh  | sh
+#    wget -O- http://mbr.github.io/xvisi  | sh
 #
 # 6. enjoy
 
