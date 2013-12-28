@@ -58,7 +58,7 @@ script
   cd $REPO_DIR 2>> \$LOGFILE
   git pull 1>> \$LOGFILE 2>> \$LOGFILE
   UPDATE_SCRIPT=$REPO_DIR/on_update
-  if [ -e $UPDATE_SCRIPT ];
+  if [ -e $UPDATE_SCRIPT ]; then
     echo "Running update script..." >> \$LOGFILE
     $UPDATE_SCRIPT 1>> \$LOGFILE 2>> \$LOGFILE
   else
