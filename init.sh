@@ -60,7 +60,7 @@ script
   UPDATE_SCRIPT=$REPO_DIR/on_update
   if [ -e $UPDATE_SCRIPT ];
     echo "Running update script..." >> \$LOGFILE
-    $REPO_DIR/on_update.sh 1>> \$LOGFILE 2>> \$LOGFILE
+    $UPDATE_SCRIPT 1>> \$LOGFILE 2>> \$LOGFILE
   else
     echo "Update script $UPDATE_SCRIPT not found, not running" >> \$LOGFILE
   fi;
