@@ -54,7 +54,7 @@ script
   set -e
   LOGFILE=/var/log/xvisi-update.log
   echo "Checking for xvisi updates..."
-  echo "Started xvisi update on `date`" 1>> \$LOGFILE 2>> \$LOGFILE
+  echo "Started xvisi update on \`date\`" 1>> \$LOGFILE 2>> \$LOGFILE
   cd $REPO_DIR 2>> \$LOGFILE
   git pull 1>> \$LOGFILE 2>> \$LOGFILE
   UPDATE_SCRIPT=$REPO_DIR/on_update
@@ -64,6 +64,6 @@ script
   else
     echo "Update script $UPDATE_SCRIPT not found, not running" >> \$LOGFILE
   fi;
-  echo "Finished update on `date`" 1>> \$LOGFILE 2>> \$LOGFILE
+  echo "Finished update on \`date\`" 1>> \$LOGFILE 2>> \$LOGFILE
 end script
 EOF
