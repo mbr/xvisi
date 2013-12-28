@@ -62,7 +62,7 @@ script
     echo "Running update script..." >> \$LOGFILE
     \$UPDATE_SCRIPT 1>> \$LOGFILE 2>> \$LOGFILE
   else
-    echo "Update script $UPDATE_SCRIPT not found, not running" >> \$LOGFILE
+    echo "Update script \$UPDATE_SCRIPT not found, not running" >> \$LOGFILE
   fi;
   echo "Finished update on \`date\`" 1>> \$LOGFILE 2>> \$LOGFILE
 end script
