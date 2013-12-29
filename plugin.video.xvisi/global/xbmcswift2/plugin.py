@@ -294,11 +294,8 @@ class Plugin(XBMCMixin):
                      path, view_func.__name__)
             listitems = view_func(**items)
 
-            # TODO: Verify the main UI handle is always 0, this check exists so
-            #       we don't erroneously call endOfDirectory for alternate
-            #       threads
-            # Allow the returning of bare dictionaries so we can cache view
-            if not self._end_of_directory and self.handle == 0:
+            # handle >= 0 is a bugfix backport
+            if not self._end_of_directory and self.handle >= 0:
                 listitems = self.finish(listitems)
 
             return listitems
