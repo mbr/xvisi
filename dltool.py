@@ -9,7 +9,7 @@ sys.path.append(os.path.abspath('plugin.video.xvisi/resources/lib'))
 import argparse
 import requests
 
-from xvisi import all_sites, all_sources
+from xvisi import all_sites, get_sources_for
 
 
 class InputSource(object):
@@ -116,17 +116,25 @@ for season in seasons:
     )
 
     for episode, title in episodes:
+        chosen_source = None
         for url, source_name in site.get_sources(episode):
-            for source in all_sources:
-                if source.can_play(url):
-                    video_url = source.get_video_url(url)
-                    outfile = title
+            sources = get_sources_for(url)
+            if sources:
+                break
 
-                    r = requests.get(video_url, stream=True)
+        if not sources:
+            print 'no source for', title
+            continue
 
-                    print 'video url', video_url
-                    print 'out', outfile
-                    with open(outfile, 'w') as out:
-                        for chunk in r.iter_content():
-                            out.write(chunk)
-                    break
+        source = sources[0]
+        video_url = source.get_video_url(url)
+
+        r = requests.get(video_url, stream=True)
+        outfile = title
+
+        print 'video url', video_url
+        print 'out', outfile
+        with open(outfile, 'w') as out:
+            for chunk in r.iter_content():
+                out.write(chunk)
+        break
