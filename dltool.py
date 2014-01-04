@@ -137,4 +137,4 @@ for season in seasons:
         with open(outfile, 'w') as out:
             for chunk in r.iter_content():
                 out.write(chunk)
-        break
+
